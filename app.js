@@ -218,7 +218,7 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
         let years_of_experience = (isDefined(contexts[0].parameters['years-of-experience']) && contexts[0].parameters['years-of-experience']!= '') ? contexts[0].parameters['years-of-experience']: '';
         let job_vacancy = (isDefined(contexts[0].parameters['job-vacancy']) && contexts[0].parameters['job-vacancy']!= '') ? contexts[0].parameters['job-vacancy']: '';
 
-        if (phone_number != '', user_name != '', previous_job != '', years_of_experience != '' && job_vacancy != ''){
+        if (phone_number != '' && user_name != '' && previous_job != '' && years_of_experience != '' && job_vacancy != ''){
           let emailContent = "A new job enquiry from"  + user_name + " for the job: " + job_vacancy +
                             ".<br> Previous Job Position: " + previous_job + "." +
                             ".<br> Years Of Experience: " + years_of_experience + "." +

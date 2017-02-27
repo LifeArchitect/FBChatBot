@@ -127,9 +127,6 @@ app.post('/webhook/', function (req, res) {
 });
 
 
-
-
-
 function receivedMessage(event) {
 
   var senderID = event.sender.id;
@@ -215,13 +212,13 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
   switch (action) {
     case "detailed-application":
       if (isDefined(contexts[0]) && contexts[0].name == 'job_application' && contexts[0].parameters) {
-        let phone_number = (isDefined(contexts[0].parameters['phone_number']) && contexts[0].parameters['phone_number']!= '')? contexts[0].parameters['phone_number']: '';
-        let user_name = (isDefined(contexts[0].parameters['user_name']) && contexts[0].parameters['user_name']!= '')? contexts[0].parameters['user_name']: '';
-        let previous_job = (isDefined(contexts[0].parameters['previous_job']) && contexts[0].parameters['previous_job']!= '')? contexts[0].parameters['previous_job']: '';
-        let years_of_experience = (isDefined(contexts[0].parameters['years_of_experience']) && contexts[0].parameters['years_of_experience']!= '')? contexts[0].parameters['years_of_experience']: '';
-        let job_vacancy = (isDefined(contexts[0].parameters['job_vacancy']) && contexts[0].parameters['job_vacancy']!= '')? contexts[0].parameters['job_vacancy']: '';
+        let phone_number = (isDefined(contexts[0].parameters['phone-number']) && contexts[0].parameters['phone-number']!= '') ? contexts[0].parameters['phone-number']: '';
+        let user_name = (isDefined(contexts[0].parameters['user-name']) && contexts[0].parameters['user-name']!= '') ? contexts[0].parameters['user-name']: '';
+        let previous_job = (isDefined(contexts[0].parameters['previous-job']) && contexts[0].parameters['previous-job']!= '') ? contexts[0].parameters['previous-job']: '';
+        let years_of_experience = (isDefined(contexts[0].parameters['years-of-experience']) && contexts[0].parameters['years-of-experience']!= '') ? contexts[0].parameters['years-of-experience']: '';
+        let job_vacancy = (isDefined(contexts[0].parameters['job-vacancy']) && contexts[0].parameters['job-vacancy']!= '') ? contexts[0].parameters['job-vacancy']: '';
 
-        if (phone_number != '', user_name != '', previous_job != '', years_of_experience != '', job_vacancy != ''){
+        if (phone_number != '', user_name != '', previous_job != '', years_of_experience != '' && job_vacancy != ''){
           let emailContent = "A new job enquiry from"  + user_name + " for the job: " + job_vacancy +
                             ".<br> Previous Job Position: " + previous_job + "." +
                             ".<br> Years Of Experience: " + years_of_experience + "." +
@@ -403,9 +400,6 @@ function sendToApiAi(sender, text) {
   apiaiRequest.end();
 }
 
-
-
-
 function sendTextMessage(recipientId, text) {
   var messageData = {
     recipient: {
@@ -527,8 +521,6 @@ function sendFileMessage(recipientId, fileName) {
 
   callSendAPI(messageData);
 }
-
-
 
 /*
  * Send a button message using the Send API.

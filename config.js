@@ -4,5 +4,7 @@ module.exports = {
     API_AI_CLIENT_ACCESS_TOKEN: '06b3814f48884173bd0dfdaeea253176',
     FB_APP_SECRET: '436e0dc116bf61dc7cd7802c8bf01ba1',
     SERVER_URL: "https://smartbot94.herokuapp.com",
-    SENDGRID_API_KEY: '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'
+    SENDGRID_API_KEY: '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',
+    EMAIL_FROM: 'pswinspire@live.com',
+    EMAIL_TO: 'pswinspire@live.com'
 };

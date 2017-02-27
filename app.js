@@ -26,6 +26,15 @@ if (!config.FB_APP_SECRET) {
 if (!config.SERVER_URL) { //used for ink to static files
   throw new Error('missing SERVER_URL');
 }
+if (!config.SENDGRID_API_KEY) { //used for sending emails
+  throw new Error('missing SENDGRID_API_KEY');
+}
+if (!config.EMAIL_FROM) { //used for sending emails
+  throw new Error('missing EMAIL_FROM');
+}
+if (!config.EMAIL_TO) { //used for sending emails
+  throw new Error('missing EMAIL_FROM');
+}
 
 app.set('port', (process.env.PORT || 5000)) // Setting port to 5000
 
@@ -179,8 +188,49 @@ function handleEcho(messageId, appId, metadata) {
   console.log("Received echo for message %s and app %d with metadata %s", messageId, appId, metadata);
 }
 
+function sendEmail(subject, content) { // using SendGrid's v3 Node.js Library - https://github.com/sendgrid/sendgrid-nodejs
+
+    var helper = require('sendgrid').mail;
+    var from_email = new helper.Email(config.EMAIL_FROM);
+    var to_email = new helper.Email(config.EMAIL_TO);
+    var subject = "Sending with SendGrid is Fun";
+    var content = new helper.Content("text/plain", "and easy to do anywhere, even with Node.js");
+    var mail = new helper.Mail(from_email, subject, to_email, content);
+    var sg = require('sendgrid')(config.SENDGRID_API_KEY); // genrating API Client Key
+    var request = sg.emptyRequest({
+    method: 'POST',
+    path: '/v3/mail/send',
+    body: mail.toJSON()
+  });
+
+  sg.API(request, function(error, response) {
+    console.log(response.statusCode);
+    console.log(response.body);
+    console.log(response.headers);
+  })
+
+}
+
 function handleApiAiAction(sender, action, responseText, contexts, parameters) {
   switch (action) {
+    case "detailed-application":
+      if (isDefined(contexts[0]) && contexts[0].name == 'job_application' && contexts[0].parameters) {
+        let phone_number = (isDefined(contexts[0].parameters['phone_number']) && contexts[0].parameters['phone_number']!= '')? contexts[0].parameters['phone_number']: '';
+        let user_name = (isDefined(contexts[0].parameters['user_name']) && contexts[0].parameters['user_name']!= '')? contexts[0].parameters['user_name']: '';
+        let previous_job = (isDefined(contexts[0].parameters['previous_job']) && contexts[0].parameters['previous_job']!= '')? contexts[0].parameters['previous_job']: '';
+        let years_of_experience = (isDefined(contexts[0].parameters['years_of_experience']) && contexts[0].parameters['years_of_experience']!= '')? contexts[0].parameters['years_of_experience']: '';
+        let job_vacancy = (isDefined(contexts[0].parameters['job_vacancy']) && contexts[0].parameters['job_vacancy']!= '')? contexts[0].parameters['job_vacancy']: '';
+
+        if (phone_number != '', user_name != '', previous_job != '', years_of_experience != '', job_vacancy != ''){
+          let emailContent = "A new job enquiry from"  + user_name + " for the job: " + job_vacancy +
+                            ".<br> Previous Job Position: " + previous_job + "." +
+                            ".<br> Years Of Experience: " + years_of_experience + "." +
+                            ".<br> Phone Number: " + phone_number + ".";
+
+          sendEmail('New Job Application', emailContent)
+        }
+      }
+      sendTextMessage(sender, responseText);
     case "job-enquiry":
       let replies = [
         {

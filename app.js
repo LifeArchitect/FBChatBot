@@ -227,7 +227,7 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
           sendEmail('New Job Application', emailContent)
         }
       }
-      sendTextMessage(sender, responseText);
+      // sendTextMessage(sender, responseText);
     case "job-enquiry":
       let replies = [
         {

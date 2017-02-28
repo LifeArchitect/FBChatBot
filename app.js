@@ -740,7 +740,7 @@ function greetUserText(userId) {
         console.log("FB user: %s %s, %s",
           user.first_name, user.last_name, user.gender); // getting info from users FB profile
 
-        sendTextMessage(userId, "Welcome " + user.first_name + '!' + 'I can answer FAQs for you and do job interviews. What can I help you with?');
+        sendTextMessage(userId, "Welcome " + user.first_name + '!' + ' I can answer FAQs for you and do job interviews. What can I help you with?');
       } else {
         console.log("Cannot get data for fb user with id",
           userId);
@@ -808,7 +808,7 @@ function receivedPostback(event) { // When user clicks on a generic item in thre
       break;
     case 'JOB_APPLY':
       // Get feedback for new jobs
-      sendToApiAi(senderID, "Job Openings");
+      sendToApiAi(senderID, "job openings");
       break;
     case 'CHAT':
       sendTextMessage(senderID, "I love chatting too, do you have other questions for me?");

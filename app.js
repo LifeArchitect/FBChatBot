@@ -220,7 +220,7 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
         request({
           url: 'http://api.openweathermap.org/data/2.5/weather', //URL to hit
           qs: {
-            appid: 'config.WEATHER_API_KEY',
+            appid: config.WEATHER_API_KEY,
             q: parameters["geo-city"]
           }, //Query string data
         }, function(error, response, body){

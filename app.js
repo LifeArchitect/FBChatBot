@@ -225,7 +225,6 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
             type:"phone_number",
             title:"Call us",
             payload:"+6598214240"
-
           },
           {
             type:"postback",
@@ -236,8 +235,6 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
 
           sendButtonMessage(sender, "What would you like to do next?", buttons);
         }, 3000)
-
-
 
     break;
     case "detailed-application":
@@ -806,6 +803,10 @@ function receivedPostback(event) { // When user clicks on a generic item in thre
   var payload = event.postback.payload;
 
   switch (payload) {
+    case 'JOB_APPLY':
+      // Get feedback for new jobs
+      sendToApiAi(senderID, "Job Openings");
+      break;
     case 'CHAT':
       sendTextMessage(senderID, "I love chatting too, do you have other questions for me?");
       break;

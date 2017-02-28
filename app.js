@@ -738,9 +738,9 @@ function greetUserText(userId) {
 
       if (user.first_name) {
         console.log("FB user: %s %s, %s",
-          user.first_name, user.last_name, user.gender);
+          user.first_name, user.last_name, user.gender); // getting info from users FB profile
 
-        sendTextMessage(userId, "Welcome " + user.first_name + '!');
+        sendTextMessage(userId, "Welcome " + user.first_name + '!' + 'I can answer FAQs for you and do job interviews. What can I help you with?');
       } else {
         console.log("Cannot get data for fb user with id",
           userId);
@@ -803,6 +803,9 @@ function receivedPostback(event) { // When user clicks on a generic item in thre
   var payload = event.postback.payload;
 
   switch (payload) {
+    case 'GET_STARTED':
+      greetUserText(senderID);
+      break;
     case 'JOB_APPLY':
       // Get feedback for new jobs
       sendToApiAi(senderID, "Job Openings");
@@ -814,7 +817,6 @@ function receivedPostback(event) { // When user clicks on a generic item in thre
       //unindentified payload
       sendTextMessage(senderID, "I'm not sure what you want. Can you be more specific?");
       break;
-
   }
   console.log("payload" + payload);
   console.log("Received postback for user %d and page %d with payload '%s' " +

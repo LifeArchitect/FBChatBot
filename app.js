@@ -806,13 +806,16 @@ function receivedPostback(event) { // When user clicks on a generic item in thre
   var payload = event.postback.payload;
 
   switch (payload) {
+    case 'CHAT':
+      sendTextMessage(senderID, "I love chatting too, do you have other questions for me?");
+      break;
     default:
       //unindentified payload
       sendTextMessage(senderID, "I'm not sure what you want. Can you be more specific?");
       break;
 
   }
-
+  console.log("payload" + payload);
   console.log("Received postback for user %d and page %d with payload '%s' " +
     "at %d", senderID, recipientID, payload, timeOfPostback);
 

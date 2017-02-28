@@ -268,23 +268,44 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
 
     break;
     case "detailed-application":
-      if (isDefined(contexts[0]) && contexts[0].name == 'job_application' && contexts[0].parameters) {
+      if (isDefined(contexts[0]) && contexts[0].name == 'job_application' || contexts[0].name == 'job-application-details_dialog_context' && contexts[0].parameters) {
         let phone_number = (isDefined(contexts[0].parameters['phone-number']) && contexts[0].parameters['phone-number']!= '') ? contexts[0].parameters['phone-number']: '';
         let user_name = (isDefined(contexts[0].parameters['user-name']) && contexts[0].parameters['user-name']!= '') ? contexts[0].parameters['user-name']: '';
         let previous_job = (isDefined(contexts[0].parameters['previous-job']) && contexts[0].parameters['previous-job']!= '') ? contexts[0].parameters['previous-job']: '';
         let years_of_experience = (isDefined(contexts[0].parameters['years-of-experience']) && contexts[0].parameters['years-of-experience']!= '') ? contexts[0].parameters['years-of-experience']: '';
         let job_vacancy = (isDefined(contexts[0].parameters['job-vacancy']) && contexts[0].parameters['job-vacancy']!= '') ? contexts[0].parameters['job-vacancy']: '';
 
-        if (phone_number != '' && user_name != '' && previous_job != '' && years_of_experience != '' && job_vacancy != ''){
+        if (phone_number == '' && user_name != '' && previous_job != '' && years_of_experience == ''){
+          let replies = [
+            {
+            "content_type":"text",
+            "title":"Less than a year",
+            "payload":"Less than a year"
+          },
+          {
+            "content_type":"text",
+            "title":"Less than 10 years",
+            "payload":"Less than 10 years"
+          },
+          {
+            "content_type":"text",
+            "title":"More than 10 years",
+            "payload":"More than 10 years"
+          }
+         ];
+         sendQuickReply(sender, responseText, replies);
+        } else if (phone_number != '' && user_name != '' && previous_job != '' && years_of_experience != '' && job_vacancy != ''){
           let emailContent = "A new job enquiry from"  + user_name + " for the job: " + job_vacancy +
                             ".<br> Previous Job Position: " + previous_job + "." +
                             ".<br> Years Of Experience: " + years_of_experience + "." +
                             ".<br> Phone Number: " + phone_number + ".";
 
-          sendEmail('New Job Application', emailContent)
+          sendEmail('New Job Application', emailContent);
+          sendTextMessage(sender, responseText);
+        } else {
+          sendTextMessage(sender, responseText);
         }
       }
-      sendTextMessage(sender, responseText);
       break;
     case "job-enquiry":
       let replies = [

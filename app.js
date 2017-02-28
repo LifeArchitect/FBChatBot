@@ -10,6 +10,7 @@ const request = require('request');
 const pg = require('pg');
 const app = express(); // Node.js framework
 const uuid = require('uuid');
+const userData = require('./user');
 
 pg.defaults.ssl = true;
 
@@ -68,6 +69,7 @@ const apiAiService = apiai(config.API_AI_CLIENT_ACCESS_TOKEN, {
   requestSource: "fb"
 });
 const sessionIds = new Map();
+const usersMap = new Map();
 
 // Index route *** Start of App ***
 app.get('/', function (req, res) {
@@ -132,6 +134,17 @@ app.post('/webhook/', function (req, res) {
   }
 });
 
+function setSessionAndUser(senderID) {
+  if (!sessionIds.has(senderID)){
+    sessionIds.set(senderID, uuid.v1())
+  }
+
+  if (!userApp.has(senderID)){
+    userData(function(user){
+      usersMap.set(senderID, user);
+    }, senderID);
+  }
+}
 
 function receivedMessage(event) {
 
@@ -140,9 +153,7 @@ function receivedMessage(event) {
   var timeOfMessage = event.timestamp;
   var message = event.message;
 
-  if (!sessionIds.has(senderID)) {
-    sessionIds.set(senderID, uuid.v1());
-  }
+  setSessionAndUser(senderID);
   //console.log("Received message for user %d and page %d at %d with message:", senderID, recipientID, timeOfMessage);
   //console.log(JSON.stringify(message));
 
@@ -778,7 +789,11 @@ function sendAccountLinking(recipientId) {
 
 
 function greetUserText(userId) {
-  //first read user firstname
+
+  let user = usersMap.get(userId);
+  sendTextMessage(userId, "Welcome " + user.first_name + '!' + ' I can answer FAQs for you and do job interviews. What can I help you with?');
+
+  /* first read user firstname
   request({
     uri: 'https://graph.facebook.com/v2.7/' + userId,
     qs: {
@@ -829,7 +844,7 @@ function greetUserText(userId) {
       console.error(response.error);
     }
 
-  });
+  }); */
 }
 
 /*

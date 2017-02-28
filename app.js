@@ -139,7 +139,7 @@ function setSessionAndUser(senderID) {
     sessionIds.set(senderID, uuid.v1());
   }
 
-  if (!userMap.has(senderID)){
+  if (!usersMap.has(senderID)){
     userData(function(user){
       usersMap.set(senderID, user);
     }, senderID);

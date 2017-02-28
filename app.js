@@ -35,6 +35,9 @@ if (!config.EMAIL_FROM) { //used for sending emails
 if (!config.EMAIL_TO) { //used for sending emails
   throw new Error('missing EMAIL_FROM');
 }
+if (!config.WEATHER_API_KEY) { //used for sending emails
+  throw new Error('missing WEATHER_API_KEY');
+}
 
 app.set('port', (process.env.PORT || 5000)) // Setting port to 5000
 
@@ -210,6 +213,33 @@ function sendEmail(subject, content) { // using SendGrid's v3 Node.js Library - 
 
 function handleApiAiAction(sender, action, responseText, contexts, parameters) {
   switch (action) {
+    case "get-current-weather":
+      if (parameters.hasOwnProperty("geo-city") && parameters["geo-city"]!= '') {
+
+        var request = require('request');
+        request({
+          url: 'http://api.openweathermap.org/data/2.5/weather', //URL to hit
+          qs: {
+            appid: 'config.WEATHER_API_KEY',
+            q: parameters["geo-city"]
+          }, //Query string data
+        }, function(error, response, body){
+          if(!error && response.statusCode == 200){
+            let weather = JSON.parse(body);
+            if (weather.hasOwnProperty("weather")){
+              let reply = '${responseText} ${weather["weather"][0]["description"]}';
+              sendTextMessage(sender, reply);
+            } else {
+              sendTextMessage(sender, 'No weather forecast available for ${parameters["geo-city"]}');
+            }
+          } else {
+            console.error(response.error);
+          }
+      });
+      } else {
+        sendTextMessage(sender, responseText);
+      }
+    break;
     case "faq-delivery":
         sendTextMessage(sender, responseText);
         sendTypingOn(sender);

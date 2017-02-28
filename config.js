@@ -6,5 +6,6 @@ module.exports = {
     SERVER_URL: "https://smartbot94.herokuapp.com",
     SENDGRID_API_KEY: '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',
     EMAIL_FROM: 'pswinspire@live.com',
-    EMAIL_TO: 'pswinspire@live.com'
+    EMAIL_TO: 'pswinspire@live.com',
+    WEATHER_API_KEY: 'eff666c838d64bb6c18184d8aca1a167'
 };

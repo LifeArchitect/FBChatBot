@@ -210,6 +210,36 @@ function sendEmail(subject, content) { // using SendGrid's v3 Node.js Library - 
 
 function handleApiAiAction(sender, action, responseText, contexts, parameters) {
   switch (action) {
+    case "faq-delivery":
+        sendTextMessage(sender, responseText);
+        sendTypingOn(sender);
+        // Ask what user wants to do next
+        setTimeout(function() {
+          let buttons = [
+          {
+            type:"web_url",
+            url:"https://smartbot94.herokuapp.com/track_order",
+            title:"Track my order"
+          },
+          {
+            type:"phone_number",
+            title:"Call us",
+            payload:"+6598214240"
+
+          },
+          {
+            type:"postback",
+            title:"Keep Chatting",
+            payload:"CHAT"
+          }
+        ];
+
+          sendButtonMessage(sender, "What would you like to do next?", buttons);
+        }, 3000)
+
+
+
+    break;
     case "detailed-application":
       if (isDefined(contexts[0]) && contexts[0].name == 'job_application' && contexts[0].parameters) {
         let phone_number = (isDefined(contexts[0].parameters['phone-number']) && contexts[0].parameters['phone-number']!= '') ? contexts[0].parameters['phone-number']: '';
@@ -227,7 +257,8 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
           sendEmail('New Job Application', emailContent)
         }
       }
-      // sendTextMessage(sender, responseText);
+      sendTextMessage(sender, responseText);
+      break;
     case "job-enquiry":
       let replies = [
         {

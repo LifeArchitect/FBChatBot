@@ -227,10 +227,10 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
           if(!error && response.statusCode == 200){
             let weather = JSON.parse(body);
             if (weather.hasOwnProperty("weather")){
-              let reply = ${responseText} ${weather["weather"][0]["description"]};
+              let reply = `${responseText} ${weather["weather"][0]["description"]}`;
               sendTextMessage(sender, reply);
             } else {
-              sendTextMessage(sender, 'No weather forecast available for ${parameters["geo-city"]}');
+              sendTextMessage(sender, `No weather forecast available for ${parameters["geo-city"]}`);
             }
           } else {
             console.error(response.error);

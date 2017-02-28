@@ -20,8 +20,6 @@ module.exports = function(callback, userId){
         console.log("FB user: %s %s, %s",
           user.first_name, user.last_name, user.gender); // getting info from users FB profile
 
-        sendTextMessage(userId, "Welcome " + user.first_name + '!' + ' I can answer FAQs for you and do job interviews. What can I help you with?');
-
           pg.connect(process.env.DATABASE_URL, function (err, client){
             if(err) throw err;
             console.log('connect to postgre. Searching for a user...');

@@ -136,10 +136,10 @@ app.post('/webhook/', function (req, res) {
 
 function setSessionAndUser(senderID) {
   if (!sessionIds.has(senderID)){
-    sessionIds.set(senderID, uuid.v1())
+    sessionIds.set(senderID, uuid.v1());
   }
 
-  if (!userApp.has(senderID)){
+  if (!userMap.has(senderID)){
     userData(function(user){
       usersMap.set(senderID, user);
     }, senderID);
